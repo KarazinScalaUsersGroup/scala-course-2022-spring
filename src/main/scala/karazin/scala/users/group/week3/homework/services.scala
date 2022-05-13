@@ -1,5 +1,3 @@
-package karazin.scala.users.group.week3.homework
-
 /*
 
 Fix the code to make it compilable

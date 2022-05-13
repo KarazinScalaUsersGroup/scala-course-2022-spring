@@ -1,5 +1,3 @@
-package karazin.scala.users.group.week4.homework
-
 /*
 
 Task:
