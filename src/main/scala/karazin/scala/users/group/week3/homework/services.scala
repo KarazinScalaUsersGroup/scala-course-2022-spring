@@ -3,6 +3,7 @@
 Fix the code to make it compilable
 Write tests
 
+ */
 package karazin.scala.users.group.week3.homework
 
 import java.util.UUID
@@ -11,7 +12,7 @@ import scala.util.Success
 import scala.util.Failure
 
 import karazin.scala.users.group.week3.homework.model._
-
+import concurrent.ExecutionContext.Implicits.global
 
 object services:
   
@@ -48,4 +49,3 @@ object services:
       Share(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
     }
     
- */
