@@ -13,12 +13,12 @@ import model._
  */
 object services:
   def getUserProfile(): ErrorOr[UserProfile] = 
-    UserProfile(UUID.randomUUID())
+    ErrorOr(UserProfile(UUID.randomUUID()))
   def getPosts(userId: UUID): ErrorOr[List[Post]] = 
-      Post(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+    ErrorOr(Post(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil)
   def getComments(postId: UUID): ErrorOr[List[Comment]] = 
-      Comment(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+    ErrorOr(Comment(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil)
   def getLikes(postId: UUID): ErrorOr[List[Like]] = 
-      Like(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+    ErrorOr(Like(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil)
   def getShares(postId: UUID): ErrorOr[List[Share]] =
-      Share(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+    ErrorOr(Share(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil)

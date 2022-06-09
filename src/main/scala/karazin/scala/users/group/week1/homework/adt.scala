@@ -14,8 +14,9 @@ object adt:
   enum ErrorOr[+V]:
     
     // Added to make it compilable. Remove it.
-    case DummyCase
-    
+    case Value(x: V) extends ErrorOr[V]
+    case Error extends ErrorOr[Nothing]
+
     /* 
       Two case must be defined: 
       * a case for a regular value
@@ -29,7 +30,10 @@ object adt:
       Make sure that in case of failing the method with exception
       no exception is thrown but the case for an error is returned
     */ 
-    def flatMap = ???
+    def flatMap[Q](f: V ⇒ ErrorOr[Q]): ErrorOr[Q] =
+      this match
+        case ErrorOr.Error ⇒ ErrorOr.Error
+        case ErrorOr.Value(v)  ⇒ f(v)
 
     /* 
       The method is used for changing the internal object
@@ -38,7 +42,10 @@ object adt:
       Make sure that in case of failing the method with exception
       no exception is thrown but the case for an error is returned
      */
-    def map = ???
+    def map[Q](f: V ⇒ Q): ErrorOr[Q] =
+      this match
+        case ErrorOr.Error ⇒ ErrorOr.Error
+        case ErrorOr.Value(v)  ⇒ ErrorOr.Value(f(v))
       
   // Companion object to define constructor
   object ErrorOr:
@@ -48,6 +55,7 @@ object adt:
       Make sure that in case of failing the method with exception
       no exception is thrown but the case for an error is returned
     */
-    def apply = ???
+    def apply[V](v: V): ErrorOr[V] =
+      if v == null then ErrorOr.Error else ErrorOr.Value(v)
       
   
