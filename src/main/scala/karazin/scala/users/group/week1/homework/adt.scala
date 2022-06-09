@@ -56,6 +56,7 @@ object adt:
       no exception is thrown but the case for an error is returned
     */
     def apply[V](v: V): ErrorOr[V] =
+      println(v)
       if v == null then ErrorOr.Error else ErrorOr.Value(v)
       
   
