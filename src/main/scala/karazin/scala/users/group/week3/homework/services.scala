@@ -24,7 +24,7 @@ object services:
   // Fix the code make it compilable
   def getPosts(userId: UUID): Future[List[Post]] =
     Future {
-      Post(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+      Post(userId = userId, postId = UUID.randomUUID()) :: Nil
     }
   
   // Fix the code make it compilable
@@ -32,20 +32,20 @@ object services:
     Future {
       // Emulating time consumed operation
       Thread.sleep(5000)
-      Comment(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+      Comment(userId = UUID.randomUUID(), postId = postId) :: Nil
     }
   
   def getLikes(postId: UUID): Future[List[Like]] = 
     Future {
       // Emulating time consumed operation
       Thread.sleep(2000)
-      Like(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+      Like(userId = UUID.randomUUID(), postId = postId):: Nil
     }
   
   def getShares(postId: UUID): Future[List[Share]] = 
     Future {
       // Emulating time consumed operation
       Thread.sleep(500)
-      Share(userId = UUID.randomUUID(), postId = UUID.randomUUID()) :: Nil
+      Share(userId = UUID.randomUUID(), postId = postId) :: Nil
     }
     

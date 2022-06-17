@@ -15,6 +15,5 @@ class ProgramSuite extends munit.FunSuite:
   
   test("successful async test example") {
     Future {
-      assertEquals(42, 42)
     }
   }
