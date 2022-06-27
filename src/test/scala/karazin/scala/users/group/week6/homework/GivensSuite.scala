@@ -1,9 +1,10 @@
 package karazin.scala.users.group.week6.homework
 
 import scala.concurrent.Future
+import karazin.scala.users.group.week6.homework.givens.{given, _}
 
-import karazin.scala.users.group.week5.homework.givens.{given, _}
-import karazin.scala.users.group.week6.homework.givens.IntEncoder.toJsonString
+import org.scalacheck._
+import Prop.{forAll, propBoolean}
 
 /*
   Write test for all programs in karazin.scala.users.group.week4.homework.givens
@@ -27,87 +28,59 @@ import karazin.scala.users.group.week6.homework.givens.IntEncoder.toJsonString
   NB: Do not use sync, this homework does not belong async stuff
     
  */
-class GivensSuite extends munit.FunSuite:
+object nativeTypes extends Properties("native types"):
 
-  test("Int even") {
-    assertEquals(
-      200.toJsonString(), "200"
-    )
+  property("integer") = forAll { (number: Int) =>
+    number.toJsonString() == number.toString()
   }
 
-  test("Int odd") {
-    assertEquals(
-      JsonStringEncoder[Int]
-        .encode(117), "117"
-    )
+  property("string") = forAll { (string: String) =>
+    string.toJsonString() == "\"" + string + "\""
   }
 
-  test("Int zero") {
-    assertEquals(
-      JsonStringEncoder[Int]
-        .encode(0), "0"
-    )
+  property("boolean") = forAll { (boolean: Boolean) =>
+    boolean.toJsonString() == boolean.toString()
   }
 
-  test("Int negative") {
-    assertEquals(
-      JsonStringEncoder[Int]
-        .encode(-7), "-7"
-    )
+end nativeTypes
+
+object list extends Properties("List"):
+
+  def getSampleString[T](list: List[T])(using encoder: => JsonStringEncoder[T]): String =
+    list.map { (elem) =>
+      elem.toJsonString()
+    }.mkString("[", ",", "]")
+
+  property("list Integer") = forAll { (list: List[Int]) =>
+    list.toJsonString() == getSampleString(list)
   }
 
-  test("Bool false") {
-    assertEquals(
-      JsonStringEncoder[Boolean]
-        .encode(false), "false"
-    )
+  property("list String") = forAll { (list: List[String]) =>
+    list.toJsonString() == getSampleString(list)
   }
 
-  test("Bool JSON true") {
-    assertEquals(
-      JsonStringEncoder[Boolean]
-        .encode(true), "true"
-    )
+  property("list Boolean") = forAll { (list: List[Boolean]) =>
+    list.toJsonString() == getSampleString(list)
   }
 
-  test("String") {
-    assertEquals(
-      JsonStringEncoder[String]
-        .encode("Lorem ipsum dolor"), "\"Lorem ipsum dolor\""
-    )
+end list
+
+object map extends Properties("Map"):
+
+  def getSampleString[V](map: Map[String, V])(using encoder: => JsonStringEncoder[V]): String =
+    map.foldLeft(List[String]()) {
+      case (acc, (key, value)) => acc :+ (key.toJsonString() + ": " + value.toJsonString())}.mkString("{", ",", "}")
+
+  property("map Integer") = forAll { (map: Map[String, Int]) =>
+    map.toJsonString() == getSampleString(map)
   }
 
-  test("String Empty") {
-    assertEquals(
-      JsonStringEncoder[String]
-        .encode(""), "\"\""
-    )
+  property("map String") = forAll { (map: Map[String, String]) =>
+    map.toJsonString() == getSampleString(map)
   }
 
-  test("List String") {
-    assertEquals(
-      JsonStringEncoder[List[String]]
-        .encode("Lorem" :: "ipsum" :: "dolor" :: Nil), "[\"Lorem\", \"ipsum\", \"dolor\"]"
-    )
+  property("map Boolean") = forAll { (map: Map[String, Boolean]) =>
+    map.toJsonString() == getSampleString(map)
   }
 
-  test("List Booleans") {
-    assertEquals(
-      JsonStringEncoder[List[Boolean]]
-        .encode(true :: false :: true :: Nil), "[true, false, true]"
-    )
-  }
-
-  test("List Integers") {
-    assertEquals(
-      JsonStringEncoder[List[Int]]
-        .encode(90 :: -119 :: 0 :: Nil), "[90, -119, 0]"
-    )
-  }
-
-  test("List Empty") {
-    assertEquals(
-      JsonStringEncoder[List[Int]]
-        .encode(Nil), "[]"
-    )
-  }
+end map

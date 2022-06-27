@@ -31,8 +31,7 @@ object givens:
   given MapEncoder[V](using encoderValue: => JsonStringEncoder[V])(using encoderKey: => JsonStringEncoder[String]): JsonStringEncoder[Map[String, V]] with
     def encode(src: Map[String, V]): String =
       src.foldLeft(List[String]()) {
-        case (acc, (key, value)) => acc :+ (key.toJsonString() + ": " + value.toJsonString())
-      }.mkString("{ ", ", ", " }")
+        case (acc, (key, value)) => acc :+ (key.toJsonString() + ": " + value.toJsonString())}.mkString("{", ",", "}")
 
   object JsonStringEncoder:
     def apply[V](using encoder: => JsonStringEncoder[V]): JsonStringEncoder[V] =
